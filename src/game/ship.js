@@ -1,5 +1,6 @@
 import { Weapon, Laser } from './parts/weapon';
 import { Shield } from './parts/shield';
+import { animalId, numericId } from 'short-animal-id';
 
 class Ship {
   equipment = [];
@@ -7,7 +8,12 @@ class Ship {
   baseStat = {};
   state = {};
 
-  constructor() {}
+  constructor() {
+    this.id = `${animalId()}-${numericId(2)}`;
+  }
+  log(s) {
+    console.log(`${this.id} [${this.constructor.name}]: ${s}`);
+  }
   initializeState() {
     this.state = {
       target: null,
@@ -27,18 +33,26 @@ class Ship {
     this.state.target = ship;
   }
   addEquipment(equipment) {
-    if (this.state.equipmentSlots > this.equipment.length)
+    if (this.state.equipmentSlots > this.equipment.length) {
       this.equipment.push(equipment);
+    } else {
+      this.log('too much equipment');
+    }
   }
   addModifier(mod) {
-    if (this.state.modifierSlots > this.modifiers.length)
+    if (this.state.modifierSlots > this.modifiers.length) {
       this.modifiers.push(this.modifiers);
+    } else {
+      this.log('too many mods');
+    }
   }
   takeHit(dmg, isAvoidable) {
+    if (dmg == 0) return;
     if (isAvoidable && this.tryDodge()) {
-      console.log('ship dodged.');
+      this.log(`*DODGED* ${dmg} dmg`);
       return;
     }
+    this.log(`taking ${dmg} dmg`);
     // random shield, if any, takes damage
     const shields = this.equipment.filter((e) => e instanceof Shield);
     const dmgTaken = 0;
@@ -52,24 +66,27 @@ class Ship {
     }
 
     if (this.state.health == 0) {
-      console.log('ship died.');
+      this.log('ship died.');
     }
   }
   tick(ms) {
     this.equipment.forEach((e) => {
       e.tick(ms);
       if (e instanceof Weapon && e.readyToFire) {
+        if (!this.state.target) {
+          this.log('no target selected.');
+          return;
+        }
         // don't fire at dead targets
         if (this.state.target.isDead) {
           this.state.target = null;
-        }
-        if (!this.state.target) {
-          console.log('no target selected.');
           return;
         }
 
-        let isAvoidable = e instanceof Laser; // lasers can't be dodged
-        this.state.target.takeHit(e.fire(), isAvoidable);
+        let isAvoidable = !(e instanceof Laser); // lasers can't be dodged
+        e.fire().forEach((shot) => {
+          this.state.target.takeHit(shot, isAvoidable);
+        });
       }
     });
     // TODO: move

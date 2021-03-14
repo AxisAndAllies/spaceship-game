@@ -1,5 +1,5 @@
 import { LightShield, MediumShield } from './parts/shield';
-import { Cannon, MissileLauncher } from './parts/weapon';
+import { Cannon, Laser, MissileLauncher, RocketLauncher } from './parts/weapon';
 import { Destroyer, Gunship } from './ship';
 
 export class Game {
@@ -7,10 +7,12 @@ export class Game {
     this.ships = [];
     let a = new Destroyer();
     a.addEquipment(new MissileLauncher());
+    a.addEquipment(new RocketLauncher());
     // a.addEquipment(new LightShield());
 
     let b = new Gunship();
-    b.addEquipment(new Cannon());
+    b.addEquipment(new Laser());
+    // b.addEquipment(new Laser());
     // b.addEquipment(new MediumShield());
 
     a.setTarget(b);
@@ -39,9 +41,12 @@ export class Game {
         this.ships,
         this.ships.map((s) => s.state.health),
       );
+    if (this.ships.length == 1) {
+      this.exit();
+    }
   }
 
   exit() {
-    this.timer.clearInterval();
+    clearInterval(this.timer);
   }
 }

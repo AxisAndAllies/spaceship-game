@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.2.0",
-    "fabric": "^4.3.1"
+    "fabric": "^4.3.1",
+    "short-animal-id": "^3.0.2"
   },
   "devDependencies": {
     "prettier": "^2.0.5",
