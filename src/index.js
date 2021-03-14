@@ -1,5 +1,6 @@
 // import confetti from 'canvas-confetti';
 import { fabric } from 'fabric';
+import game from './game/game';
 
 // confetti.create(document.getElementById('canvas'), {
 //   resize: true,
@@ -17,3 +18,5 @@ let rect = new fabric.Rect({
 });
 
 canvas.add(rect);
+console.log('init');
+game.run();
