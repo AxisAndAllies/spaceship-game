@@ -17,37 +17,44 @@ export class Weapon {
   tick(ms) {
     this.state.reload = Math.max(this.state.reload - ms, 0);
   }
-  _fire() {
+  fire() {
     // reset reload
     this.state.reload = this.baseStat.reload;
 
     let total = 0;
-    this.state.numShots.forEach((e) => {
+    for (let i = 0; i < this.state.numShots; i++) {
       if (Math.random() > this.state.accuracy) {
         console.log('missed.');
         return;
       }
       total += this.state.damage;
-    });
-
+    }
+    console.log(total, 'hit');
     // returns damage
     return total;
   }
 }
 
 export class Laser extends Weapon {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   // continuous firing
   baseStat = {
     damage: 10,
-    reload: 0, // doesn't matter
+    reload: 1, // in reality fires every 1 sec lol
     range: 10,
     accuracy: 1.0,
     numShots: 1,
   };
-  fire() {}
 }
 
 export class Railgun extends Weapon {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   // ultra long range
   baseStat = {
     damage: 12,
@@ -56,10 +63,13 @@ export class Railgun extends Weapon {
     accuracy: 0.8,
     numShots: 1,
   };
-  fire() {}
 }
 
 export class Cannon extends Weapon {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   // ignores shield
   baseStat = {
     damage: 8,
@@ -68,10 +78,13 @@ export class Cannon extends Weapon {
     accuracy: 0.5,
     numShots: 1,
   };
-  fire() {}
 }
 
 export class MissileLauncher extends Weapon {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   // guided missile
   baseStat = {
     damage: 18,
@@ -80,10 +93,13 @@ export class MissileLauncher extends Weapon {
     accuracy: 0.9,
     numShots: 1,
   };
-  fire() {}
 }
 
 export class RocketLauncher extends Weapon {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   // unguided, can fire volley?
   // maybe save up for burst volley
   baseStat = {
@@ -93,5 +109,4 @@ export class RocketLauncher extends Weapon {
     accuracy: 0.6,
     numShots: 12,
   };
-  fire() {}
 }

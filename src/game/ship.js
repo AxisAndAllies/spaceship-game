@@ -50,29 +50,27 @@ class Ship {
       // remaining damage is dealt to ship
       this.state.health = Math.max(this.state.health - (dmg - dmgTaken), 0);
     }
-  }
-  fire() {
-    if (!e.state.target) {
-      console.log('no target selected.');
-      return;
+
+    if (this.state.health == 0) {
+      console.log('ship died.');
     }
-    this.equipment
-      .filter((e) => e instanceof Weapon)
-      .filter((e) => e.readyToFire)
-      .forEach((e) => {
+  }
+  tick(ms) {
+    this.equipment.forEach((e) => {
+      e.tick(ms);
+      if (e instanceof Weapon && e.readyToFire) {
         // don't fire at dead targets
         if (this.state.target.isDead) {
           this.state.target = null;
+        }
+        if (!this.state.target) {
+          console.log('no target selected.');
           return;
         }
 
         let isAvoidable = e instanceof Laser; // lasers can't be dodged
         this.state.target.takeHit(e.fire(), isAvoidable);
-      });
-  }
-  tick(ms) {
-    this.equipment.forEach((e) => {
-      e.tick();
+      }
     });
     // TODO: move
   }
