@@ -51,7 +51,7 @@ export class Railgun extends Weapon {
   // ultra long range
   baseStat = {
     damage: 12,
-    reload: 5,
+    reload: 5000,
     range: 15,
     accuracy: 0.8,
     numShots: 1,
@@ -63,7 +63,7 @@ export class Cannon extends Weapon {
   // ignores shield
   baseStat = {
     damage: 8,
-    reload: 1,
+    reload: 1000,
     range: 10,
     accuracy: 0.5,
     numShots: 1,
@@ -75,7 +75,7 @@ export class MissileLauncher extends Weapon {
   // guided missile
   baseStat = {
     damage: 18,
-    reload: 2,
+    reload: 2000,
     range: 15,
     accuracy: 0.9,
     numShots: 1,
@@ -88,7 +88,7 @@ export class RocketLauncher extends Weapon {
   // maybe save up for burst volley
   baseStat = {
     damage: 7,
-    reload: 15,
+    reload: 15000,
     range: 6,
     accuracy: 0.6,
     numShots: 12,

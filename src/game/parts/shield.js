@@ -1,5 +1,7 @@
 export class Shield {
   baseStat = {
+    amount: 0, // shield max amount
+    recharge: 0, // amount to recharge per second
     delay: 3000, // num millis to wait until shield starts recharging after hit
   };
   constructor() {}
@@ -17,6 +19,8 @@ export class Shield {
       (this.baseStat.recharge * ms) / 1000,
       this.baseStat.amount,
     );
+    // wait till next second to recharge
+    this.state.delay = 1000;
   }
   takeHit(dmg) {
     // reset delay
