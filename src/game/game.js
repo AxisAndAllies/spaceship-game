@@ -1,5 +1,4 @@
-import { LightShield, MediumShield } from './parts/shield';
-import { Cannon, Laser, MissileLauncher, RocketLauncher } from './parts/weapon';
+import { Laser, MissileLauncher, RocketLauncher } from './parts/weapon';
 import { Destroyer, Gunship } from './ship';
 
 export class Game {
