@@ -19,8 +19,9 @@ export class Shield {
     );
   }
   takeHit(dmg) {
-    // returns damage actually taken by shield
+    // reset delay
     this.state.delay = this.baseStat.delay;
+    // returns damage actually taken by shield
     const dmgTaken = Math.min(this.state.amount, dmg);
     this.state.amount -= dmgTaken;
     return dmgTaken;

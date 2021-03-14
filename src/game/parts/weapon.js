@@ -9,8 +9,18 @@ export class Weapon {
 
   // defaults
   baseStat = {};
-  fire() {
-    // returns damage
+
+  get readyToFire() {
+    return this.state.reload == 0;
+  }
+
+  tick(ms) {
+    this.state.reload = Math.max(this.state.reload - ms, 0);
+  }
+  _fire() {
+    // reset reload
+    this.state.reload = this.baseStat.reload;
+
     let total = 0;
     this.state.numShots.forEach((e) => {
       if (Math.random() > this.state.accuracy) {
@@ -20,6 +30,7 @@ export class Weapon {
       total += this.state.damage;
     });
 
+    // returns damage
     return total;
   }
 }

@@ -11,8 +11,17 @@ class Ship {
   initializeState() {
     this.state = {
       target: null,
+      posX: 0,
+      posY: 0,
       ...this.baseStat,
     };
+  }
+  get isDead() {
+    return this.state.health <= 0;
+  }
+  tryDodge() {
+    // returns if successfully dodged
+    return Math.random() < this.state.dodge;
   }
   setTarget(ship) {
     this.state.target = ship;
@@ -26,7 +35,7 @@ class Ship {
       this.modifiers.push(this.modifiers);
   }
   takeHit(dmg, isAvoidable) {
-    if (isAvoidable && Math.random() < this.state.target.state.dodge) {
+    if (isAvoidable && this.tryDodge()) {
       console.log('ship dodged.');
       return;
     }
@@ -49,10 +58,23 @@ class Ship {
     }
     this.equipment
       .filter((e) => e instanceof Weapon)
+      .filter((e) => e.readyToFire)
       .forEach((e) => {
+        // don't fire at dead targets
+        if (this.state.target.isDead) {
+          this.state.target = null;
+          return;
+        }
+
         let isAvoidable = e instanceof Laser; // lasers can't be dodged
         this.state.target.takeHit(e.fire(), isAvoidable);
       });
+  }
+  tick(ms) {
+    this.equipment.forEach((e) => {
+      e.tick();
+    });
+    // TODO: move
   }
 }
 
@@ -64,7 +86,7 @@ export class Fighter extends Ship {
   baseStat = {
     speed: 14,
     health: 300,
-    dodge: 0.8,
+    dodge: 0.6,
     equipmentSlots: 3,
     modifierSlots: 2,
   };
@@ -77,7 +99,7 @@ export class Gunship extends Ship {
   baseStat = {
     speed: 10,
     health: 600,
-    dodge: 0.5,
+    dodge: 0.4,
     equipmentSlots: 5,
     modifierSlots: 2,
   };
