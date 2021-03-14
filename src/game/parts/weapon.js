@@ -1,9 +1,17 @@
-class Weapon {
+export class Weapon {
+  constructor() {}
+  initializeState() {
+    this.state = {
+      target: null,
+      ...this.baseStat,
+    };
+  }
+
   // defaults
-  baseStat = {
-    numShots: 1,
-  };
-  fire() {}
+  baseStat = {};
+  fire() {
+    // returns damage
+  }
 }
 
 export class Laser extends Weapon {
@@ -13,6 +21,7 @@ export class Laser extends Weapon {
     reload: 0, // doesn't matter
     range: 10,
     accuracy: 1.0,
+    numShots: 1,
   };
   fire() {}
 }
@@ -24,6 +33,7 @@ export class Railgun extends Weapon {
     reload: 5,
     range: 15,
     accuracy: 0.8,
+    numShots: 1,
   };
   fire() {}
 }
@@ -35,6 +45,7 @@ export class Cannon extends Weapon {
     reload: 1,
     range: 10,
     accuracy: 0.5,
+    numShots: 1,
   };
   fire() {}
 }
@@ -46,6 +57,7 @@ export class MissileLauncher extends Weapon {
     reload: 2,
     range: 15,
     accuracy: 0.9,
+    numShots: 1,
   };
   fire() {}
 }
@@ -55,10 +67,10 @@ export class RocketLauncher extends Weapon {
   // maybe save up for burst volley
   baseStat = {
     damage: 7,
-    numShots: 12,
     reload: 15,
     range: 10,
     accuracy: 0.3,
+    numShots: 12,
   };
   fire() {}
 }

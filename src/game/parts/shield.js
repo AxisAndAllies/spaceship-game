@@ -1,32 +1,72 @@
 class Shield {
   baseStat = {
-    delay: 3, // num secs to wait since last hit before starting regen
+    delay: 3000, // num millis to wait until shield starts recharging after hit
   };
+  constructor() {}
+  initializeState() {
+    this.state = {
+      ...this.baseStat,
+    };
+  }
+  tick(ms) {
+    if (this.state.delay > 0) {
+      this.state.delay = Math.max(this.state.delay - ms, 0);
+      return;
+    }
+    this.state.amount = Math.min(
+      (this.baseStat.recharge * ms) / 1000,
+      this.baseStat.amount,
+    );
+  }
+  takeHit(dmg) {
+    this.state.delay = this.baseStat.delay;
+    this.state.amount = Math.max(this.state.amount - dmg, 0);
+  }
 }
 
 export class LightShield extends Shield {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   baseStat = {
     amount: 100,
     recharge: 20,
+    delay: 3000,
   };
 }
 export class MediumShield extends Shield {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   baseStat = {
     amount: 300,
     recharge: 30,
+    delay: 3000,
   };
 }
 
 export class HeavyShield extends Shield {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   baseStat = {
     amount: 500,
     recharge: 40,
+    delay: 3000,
   };
 }
 
 export class UberShield extends Shield {
+  constructor() {
+    super();
+    this.initializeState();
+  }
   baseStat = {
     amount: 1000,
     recharge: 50,
+    delay: 3000,
   };
 }
