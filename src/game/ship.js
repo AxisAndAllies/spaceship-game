@@ -1,4 +1,6 @@
 import { Weapon, Laser } from './parts/weapon';
+import { Shield } from './parts/shield';
+
 class Ship {
   equipment = [];
   modifiers = [];
@@ -23,31 +25,34 @@ class Ship {
     if (this.state.modifierSlots > this.modifiers.length)
       this.modifiers.push(this.modifiers);
   }
-  takeHit(dmg) {
-    // TODO: use shields to take hit first?
-    this.state.health = Math.max(this.state.health - dmg, 0);
+  takeHit(dmg, isAvoidable) {
+    if (isAvoidable && Math.random() < this.state.target.state.dodge) {
+      console.log('ship dodged.');
+      return;
+    }
+    // random shield, if any, takes damage
+    const shields = this.equipment.filter((e) => e instanceof Shield);
+    const dmgTaken = 0;
+    if (shields.length) {
+      const randomShield = shields[Math.floor(Math.random() * shields.length)];
+      dmgTaken = randomShield.takeHit(dmg);
+    }
+    if (dmg > dmgTaken) {
+      // remaining damage is dealt to ship
+      this.state.health = Math.max(this.state.health - (dmg - dmgTaken), 0);
+    }
   }
   fire() {
     if (!e.state.target) {
       console.log('no target selected.');
       return;
     }
-    this.equipment.forEach((e) => {
-      if (e instanceof Weapon) {
-        if (Math.random() > e.state.accuracy) {
-          console.log('missed.');
-          return;
-        }
-        if (
-          !(e instanceof Laser) && // lasers can't be dodged
-          Math.random() < this.state.target.state.dodge
-        ) {
-          console.log('ship dodged.');
-          return;
-        }
-        this.state.target.takeHit(e.fire());
-      }
-    });
+    this.equipment
+      .filter((e) => e instanceof Weapon)
+      .forEach((e) => {
+        let isAvoidable = e instanceof Laser; // lasers can't be dodged
+        this.state.target.takeHit(e.fire(), isAvoidable);
+      });
   }
 }
 

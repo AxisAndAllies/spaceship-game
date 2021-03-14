@@ -11,6 +11,16 @@ export class Weapon {
   baseStat = {};
   fire() {
     // returns damage
+    let total = 0;
+    this.state.numShots.forEach((e) => {
+      if (Math.random() > this.state.accuracy) {
+        console.log('missed.');
+        return;
+      }
+      total += this.state.damage;
+    });
+
+    return total;
   }
 }
 
@@ -68,8 +78,8 @@ export class RocketLauncher extends Weapon {
   baseStat = {
     damage: 7,
     reload: 15,
-    range: 10,
-    accuracy: 0.3,
+    range: 6,
+    accuracy: 0.6,
     numShots: 12,
   };
   fire() {}

@@ -1,4 +1,4 @@
-class Shield {
+export class Shield {
   baseStat = {
     delay: 3000, // num millis to wait until shield starts recharging after hit
   };
@@ -19,8 +19,11 @@ class Shield {
     );
   }
   takeHit(dmg) {
+    // returns damage actually taken by shield
     this.state.delay = this.baseStat.delay;
-    this.state.amount = Math.max(this.state.amount - dmg, 0);
+    const dmgTaken = Math.min(this.state.amount, dmg);
+    this.state.amount -= dmgTaken;
+    return dmgTaken;
   }
 }
 
